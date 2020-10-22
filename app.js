@@ -11,6 +11,9 @@ const enableGlobalErrorLogging = process.env.ENABLE_GLOBAL_ERROR_LOGGING === 'tr
 // create the Express app
 const app = express();
 
+//require the routes file
+const routes = require('./routes');
+
 (async () => {
   console.log('Testing the connection to the database...');
   try {
@@ -23,25 +26,11 @@ const app = express();
 
 // setup morgan which gives us http request logging
 app.use(morgan('dev'));
-
-app.get('/users', async (req, res) => {
-  const users = await User.findAll();
-  res.json(users);
-});
-app.get('/courses', async (req, res) => {
-  const courses = await Course.findAll();
-  res.json(courses);
-});
-
+//json middleware
+app.use(express.json())
 
 // TODO setup your api routes here
-
-// setup a friendly greeting for the root route
-app.get('/', (req, res) => {
-  res.json({
-    message: 'Welcome to the REST API project!',
-  });
-});
+app.use('/api', routes);
 
 // send 404 if no other route matched
 app.use((req, res) => {
