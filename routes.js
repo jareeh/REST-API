@@ -10,12 +10,12 @@ const router = express.Router();
 
 // TODO setup your api routes here
 router.get('/users', authenticateUser, async (req, res) => {
-    const users = await User.findAll({
+    const user = await User.findByPk(req.currentUser.id, {
         attributes: {
             exclude: ['password', 'createdAt', 'updatedAt']
         }
     });
-    res.json(users);
+    res.json(user);
 });
 
 //POST add a new user route, with route AND sequelize validation/error handling
