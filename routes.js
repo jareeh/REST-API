@@ -95,8 +95,8 @@ router.post('/courses', authenticateUser, asyncHandler(async (req, res) => {
     if(errors.length > 0){
         res.status(400).json({ errors });
     } else {
-        await Course.create(course);
-        res.location('/').status(201).end();
+        const newCourse = await Course.create(course);
+        res.location(`/courses/${newCourse.id}`).status(201).end();
     }
 }));
 
@@ -120,7 +120,7 @@ router.put('/courses/:id', authenticateUser, asyncHandler(async (req, res) => {
         const course = await Course.findByPk(req.params.id);
             if(req.currentUser.id === course.userId){
                 await course.update(updatedCourse);
-                res.location('/').status(201).end();
+                res.status(201).end();
             } else {
                 res.status(403).json({ error: 'You must own this course to modify it' })
             }
