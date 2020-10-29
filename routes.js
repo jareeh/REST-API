@@ -64,7 +64,13 @@ router.get('/courses', asyncHandler(async (req, res) => {
     const courses = await Course.findAll({
         attributes: {
             exclude: ['createdAt', 'updatedAt']
-        }
+        },
+        include: [
+            {
+                model: User,
+                as: 'user',
+            }
+        ]
     });
     res.json(courses);
 }));
@@ -74,7 +80,13 @@ router.get('/courses/:id', asyncHandler(async (req, res) => {
     const course = await Course.findByPk(req.params.id, {
         attributes: {
             exclude: ['password', 'createdAt', 'updatedAt']
-        }
+        },
+        include: [
+            {
+                model: User,
+                as: 'user',
+            }
+        ]
     });
     res.json(course)
 }));
